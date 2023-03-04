@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&family=Nunito+Sans&display=swap');
+body {
+    margin: 0;
+    font-family: 'Noto Sans', 'Nunito Sans';
+     
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* background: #1c1e29; */
+    background-color: #8319ee;
+        background-image:
+            radial-gradient(at 47% 33%, hsl(162.00, 77%, 40%) 0, transparent 59%),
+            radial-gradient(at 82% 65%, hsl(198.00, 100%, 50%) 0, transparent 55%);
+}
