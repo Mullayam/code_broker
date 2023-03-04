@@ -4,7 +4,7 @@ const http = require("http");
 const path = require("path");
 const { Server } = require("socket.io");
 const ACTIONS = require("./src/Actions");
-
+// const routes = require("./main/routes");
 const server = http.createServer(app);
 const io = new Server(server);
 
@@ -28,7 +28,6 @@ function getAllConnectedClients(roomId) {
 
 io.on("connection", (socket) => {
   console.log("socket connected", socket.id);
-
   socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
     userSocketMap[socket.id] = username;
     socket.join(roomId);
@@ -62,6 +61,8 @@ io.on("connection", (socket) => {
     socket.leave();
   });
 });
-
+app.listen(3001, () => {
+  console.log(`APi Services running on port http://localhost:3001`);
+});
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+server.listen(PORT, () => console.log(`Socket running on port ${PORT}`));
