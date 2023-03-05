@@ -4,6 +4,23 @@ body,html {
     font-family: 'Noto Sans', 'Nunito Sans';
    
 }
+
+li {
+    list-style-type: none
+}
+
+.terminal-output {
+    padding: 1px;
+    border-bottom: 0.5px white solid;
+}
+
+.terminal-output.warn {
+    color: orange;
+}
+
+.terminal-output.error {
+    color: red;
+}
 .homePageWrapper {
     display: flex;
     align-items: center;
@@ -156,8 +173,9 @@ footer a:hover {
     margin-top: 20px;
 }
 .CodeMirror {
-    min-height: calc(100vh - 20px);
-    font-size: 20px;
+    min-height: calc(95vh - 20px);
+        font-size: 20px;
     line-height: 1.6;
-    padding-top: 20px;
-}
+    padding-top: 10px;
+    }
+
