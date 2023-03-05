@@ -1,7 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { styled } from "@mui/material/styles";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Unstable_Grid2";
 import toast from "react-hot-toast";
 import ACTIONS from "../Actions";
@@ -103,7 +101,7 @@ const EditorPage = () => {
             <div className="logo">
               <img className="logoImage" src="/code-sync.png" alt="logo" />
             </div>
-            <SidebarIconComponent />
+            <SidebarIconComponent username={location.state.username || null} />
             <h3>Connected</h3>
             <div className="clientsList">
               {clients.map((client) => (

@@ -7,7 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function FormDialog() {
+export default function InfoDialog() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -20,9 +20,6 @@ export default function FormDialog() {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>

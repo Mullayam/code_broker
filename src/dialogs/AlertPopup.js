@@ -8,10 +8,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
-export default function ResponsiveDialog() {
+export default function AlertDialog() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -37,8 +37,8 @@ export default function ResponsiveDialog() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
+            Let Google help apps determine location. This means sending
+            anonymous location data to Google, even when no apps are running.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

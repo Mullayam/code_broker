@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function AlertDialog() {
+export default function SaveFileDialog() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -19,9 +19,6 @@ export default function AlertDialog() {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
-      </Button>
       <Dialog
         open={open}
         onClose={handleClose}

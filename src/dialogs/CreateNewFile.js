@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -6,43 +6,33 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-
-export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
+export default function NewFileForm({ newFileModal, setNewFileModal }) {
   const handleClose = () => {
-    setOpen(false);
+    setNewFileModal(false);
   };
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+      <Dialog open={newFileModal} onClose={handleClose}>
+        <DialogTitle>New File</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
+            Create a New File,
+            <i>FileName Format : index.js,main.py,routes.php</i>
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Email Address"
-            type="email"
+            label="Enter FileName"
+            type="text"
             fullWidth
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          <Button onClick={handleClose}>Create</Button>
         </DialogActions>
       </Dialog>
     </div>
