@@ -1,10 +1,20 @@
 const router = require("express");
 const FileActivity = require("./FileHandler");
-const routes = router();
+ const {
+   CheckProtectedRoomOrNot,
+   VerifyRoomPasswords,
+ } = require("./protected/route");
 
-routes.post("/create/file", FileActivity.createNewFile);
-// routes.post("/execute", FileActivity.genrateOutput);
-// routes.get("/allfiles/", FileActivity.getAllFiles);
-// routes.get("/get/single/", FileActivity.downloadFile);
+ const routes = router();
+
+ routes.get("/protected/:clientRoomId", CheckProtectedRoomOrNot);
+ routes.post("/protected-room/verify/password", VerifyRoomPasswords);
+ routes.post("/create/file", FileActivity.createNewFile);
+ // routes.post("/execute", FileActivity.genrateOutput);
+ routes.get("/allfiles/:username", FileActivity.getAllRooms);
+ routes.post("/read/file", FileActivity.readFileContent);
+ routes.post("/save/file", FileActivity.reWriteFileContent);
+ routes.post("/get/single/", FileActivity.downloadFile);
+ routes.post("/room/single/", FileActivity.getSpecificRoomFile);
 
 module.exports = routes;
