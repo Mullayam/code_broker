@@ -8,7 +8,6 @@ import Editor from "../components/Editor";
 import EditorOutput from "../components/EditorOutput";
 import EditorConsole from "../components/EditorConsole";
 import { initSocket } from "../socket";
-
 import {
   useLocation,
   useNavigate,
@@ -17,16 +16,22 @@ import {
 } from "react-router-dom";
 import BottomLayer from "../components/BottomLayer";
 import { SidebarIconComponent } from "../components/UitlityIcon";
+import { useSelector, useDispatch } from "react-redux";
+import { add } from "../redux/slices/RoomInfo";
 
 const EditorPage = () => {
   const socketRef = useRef(null);
   const codeRef = useRef(null);
   const location = useLocation();
+  const user = location.state?.username;
   const { roomId } = useParams();
   const reactNavigator = useNavigate();
   const [clients, setClients] = useState([]);
 
+  const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(add({ roomId, user }));
+
     const init = async () => {
       socketRef.current = await initSocket();
       socketRef.current.on("connect_error", (err) => handleErrors(err));
@@ -74,7 +79,6 @@ const EditorPage = () => {
       socketRef.current.off(ACTIONS.DISCONNECTED);
     };
   }, []);
-
   async function copyRoomId() {
     try {
       await navigator.clipboard.writeText(roomId);

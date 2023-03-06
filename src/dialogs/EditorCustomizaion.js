@@ -16,10 +16,9 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 
 export default function MaxWidthDialog({ editorSettings, setEditorSettings }) {
-  const [fullWidth, setFullWidth] = React.useState(false);
-  const [maxWidth, setMaxWidth] = React.useState("sm");
+    
   const [passwordField, setPasswordField] = React.useState(false);
-  console.log(editorSettings, setEditorSettings);
+  // console.log(editorSettings, setEditorSettings);
   const handleClose = () => {
     setEditorSettings(false);
   };
@@ -27,8 +26,8 @@ export default function MaxWidthDialog({ editorSettings, setEditorSettings }) {
   return (
     <React.Fragment>
       <Dialog
-        fullWidth={fullWidth}
-        maxWidth={250}
+        fullWidth={true}
+        sx={{ maxWidth: "100%" }}
         open={editorSettings}
         onClose={handleClose}
       >
@@ -56,10 +55,25 @@ export default function MaxWidthDialog({ editorSettings, setEditorSettings }) {
                   }}
                 >
                   <FormControl sx={{ mt: 2, minWidth: 280 }}>
+                    <InputLabel htmlFor="Font Family">Font Family</InputLabel>
+                    <Select
+                      autoFocus
+                      // value={maxWidth}
+                      // onChange={handleMaxWidthChange}
+                      label="Font Family"
+                    >
+                      <MenuItem value="xs">xs</MenuItem>
+                      <MenuItem value="sm">sm</MenuItem>
+                      <MenuItem value="md">md</MenuItem>
+                      <MenuItem value="lg">lg</MenuItem>
+                      <MenuItem value="xl">xl</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl sx={{ mt: 2, minWidth: 280 }}>
                     <InputLabel htmlFor="Font-Size">Font Size</InputLabel>
                     <Select
                       autoFocus
-                      value={maxWidth}
+                      // value={maxWidth}
                       // onChange={handleMaxWidthChange}
                       label="Font Size"
                       inputProps={{
@@ -78,7 +92,7 @@ export default function MaxWidthDialog({ editorSettings, setEditorSettings }) {
                     <InputLabel htmlFor="themes">Themes</InputLabel>
                     <Select
                       autoFocus
-                      value={maxWidth}
+                      // value={maxWidth}
                       // onChange={handleMaxWidthChange}
                       label="Themes"
                     >
@@ -91,7 +105,7 @@ export default function MaxWidthDialog({ editorSettings, setEditorSettings }) {
                     </InputLabel>
                     <Select
                       autoFocus
-                      value={maxWidth}
+                      // /value={maxWidth}
                       // onChange={handleMaxWidthChange}
                       label="language"
                     >
@@ -109,7 +123,7 @@ export default function MaxWidthDialog({ editorSettings, setEditorSettings }) {
                   sx={{ mt: 1 }}
                   control={
                     <Switch
-                      checked={fullWidth}
+                      checked={true}
                       //  onChange={handleFullWidthChange}
                     />
                   }
@@ -119,7 +133,7 @@ export default function MaxWidthDialog({ editorSettings, setEditorSettings }) {
                   sx={{ mt: 1 }}
                   control={
                     <Switch
-                      checked={fullWidth}
+                      checked={true}
                       //  onChange={handleFullWidthChange}
                     />
                   }

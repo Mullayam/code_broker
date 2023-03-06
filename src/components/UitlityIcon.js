@@ -32,9 +32,17 @@ export const SidebarIconComponent = ({ username }) => {
           titleAccess="Create New File"
         />
 
-        <DownloadForOfflineIcon fontSize="large" titleAccess="Download Files" />
+        <DownloadForOfflineIcon
+          onClick={() => setDownloadFileModal(true)}
+          fontSize="large"
+          titleAccess="Download Files"
+        />
         <LogoDevIcon fontSize="large" titleAccess="Run Dev Test" />
-        <DisplaySettingsIcon fontSize="large" titleAccess="Editor Settings" />
+        <DisplaySettingsIcon
+          onClick={() => setEditorSettings(true)}
+          fontSize="large"
+          titleAccess="Editor Settings"
+        />
       </Box>
       {/* Modals */}
       <NewFileForm
@@ -42,13 +50,11 @@ export const SidebarIconComponent = ({ username }) => {
         setNewFileModal={setNewFileModal}
       />
       <DownloadFileDialog
-        onClick={() => setDownloadFileModal(true)}
         openFileModal={downloadFileModal}
         username={username}
         handleFileModal={setDownloadFileModal}
       />
       <EditorCustomizaion
-        onClick={() => setEditorSettings(true)}
         editorSettings={editorSettings}
         setEditorSettings={setEditorSettings}
       />
