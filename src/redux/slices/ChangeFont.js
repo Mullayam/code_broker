@@ -3,14 +3,16 @@ import { createSlice } from "@reduxjs/toolkit";
 export const ChangeFont = createSlice({
   name: "Fonts",
   initialState: {
-    fontFamily: "Helvetica",
-    fontSize: "16px",
+    fontFamily: "helvetica",
+    fontSize: 16,
     color: "#000000",
   },
   reducers: {
     UpdateFont: (state, payload) => {
-      state.RoomID = payload.payload.roomId;
-      state.User = payload.payload.user;
+      state.fontFamily = payload.payload.fontFamily;
+    },
+    ChangeFontSize: (state, payload) => {
+      state.fontSize = payload.payload.fontSize;
     },
     Defaults: (state) => {
       return state;
@@ -19,5 +21,5 @@ export const ChangeFont = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { UpdateFont, Defaults } = ChangeFont.actions;
+export const { UpdateFont, ChangeFontSize, Defaults } = ChangeFont.actions;
 export default ChangeFont.reducer;

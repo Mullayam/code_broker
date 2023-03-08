@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { useDispatch, useSelector } from "react-redux";
+import { RenderOutput } from "../redux/slices/PreviewOutput";
 function Item(props) {
   const { sx, ...other } = props;
   return (
@@ -38,6 +40,12 @@ Item.propTypes = {
 };
 
 export default function BottomLayer() {
+  const EditorInfo = useSelector((state) => state.EditorStore);
+  const dispatch = useDispatch();
+  let Preview = EditorInfo.Console.DisplayBoth;
+  const handleOutputs = () => {
+    dispatch(RenderOutput(!Preview));
+  };
   return (
     <div style={{ width: "100%" }}>
       <Box
@@ -50,13 +58,17 @@ export default function BottomLayer() {
         }}
       >
         <Item>Ln 51, Col 23</Item>
-        <Item>Spaces</Item>
-        <Item>Font Size</Item>
-        <Item>Current Language</Item>
+        <Item>Spaces: 2</Item>
+        <Item titleAccess="Font-Size">{EditorInfo.Font.fontSize}</Item>
+        <Item titleAccess="Font-Familye">{EditorInfo.Font.fontFamily}</Item>
+        <Item titleAccess="Current Language">
+          {EditorInfo.Lang.currentLanguage}
+        </Item>
         <TerminalIcon
           sx={{ m: 1 }}
           fontSize="large"
           titleAccess="Preview Console"
+          onClick={handleOutputs}
         />
         <PlayArrowIcon sx={{ m: 1 }} fontSize="large" titleAccess="Run Code" />
       </Box>

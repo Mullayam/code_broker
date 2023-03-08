@@ -19,6 +19,7 @@ async function ExistDir(Username, RoomID) {
       createdDir = true;
       return createdDir;
     }
+    return createdDir;
   } catch (err) {
     console.error(err);
   }
@@ -46,6 +47,23 @@ async function PreloadedCode(Extension) {
   }
 }
 class FileActivity {
+  static async createNewDir(req, res) {
+    const {
+      RoomInfo: { roomId, user },
+    } = req.body;
+    let DirectoryToBeCreated = await ExistDir(user, roomId);
+    if (typeof DirectoryToBeCreated === "undefined") {
+      return res.status(200).json({
+        status: "true",
+        message: "New Directory Created",
+      });
+    } else {
+      return res.status(200).json({
+        status: "false",
+        message: "Directory Already Exists",
+      });
+    }
+  }
   static async createNewFile(req, res) {
     const {
       FileDetails: { name, ext },
@@ -56,9 +74,8 @@ class FileActivity {
     if (DirectoryToBeCreated) {
       let loadData = await PreloadedCode(ext);
       let FileExistOrNot = await ExistFile(`${user}/${roomId}`, FullFileName);
-
       if (FileExistOrNot) {
-        return res.status(409).json({
+        return res.status(200).json({
           status: "false",
           message: "File Already Exists",
         });

@@ -7,8 +7,9 @@ const FileActivity = require("./FileHandler");
 
  const routes = router();
 
- routes.get("/protected/:clientRoomId", CheckProtectedRoomOrNot);
+ routes.post("/protected", CheckProtectedRoomOrNot);
  routes.post("/protected-room/verify/password", VerifyRoomPasswords);
+ routes.post("/create/dir", FileActivity.createNewDir);
  routes.post("/create/file", FileActivity.createNewFile);
  // routes.post("/execute", FileActivity.genrateOutput);
  routes.get("/allfiles/:username", FileActivity.getAllRooms);

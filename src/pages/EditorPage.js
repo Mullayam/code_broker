@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import toast from "react-hot-toast";
@@ -16,8 +16,9 @@ import {
 } from "react-router-dom";
 import BottomLayer from "../components/BottomLayer";
 import { SidebarIconComponent } from "../components/UitlityIcon";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { add } from "../redux/slices/RoomInfo";
+import { isProtected } from "../helpers/isProtected";
 
 const EditorPage = () => {
   const socketRef = useRef(null);
@@ -27,11 +28,12 @@ const EditorPage = () => {
   const { roomId } = useParams();
   const reactNavigator = useNavigate();
   const [clients, setClients] = useState([]);
-
+  const { Terminal, HTMLOutput, DisplayBoth } = useSelector(
+    (state) => state.EditorStore.Console
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(add({ roomId, user }));
-
     const init = async () => {
       socketRef.current = await initSocket();
       socketRef.current.on("connect_error", (err) => handleErrors(err));
@@ -73,6 +75,15 @@ const EditorPage = () => {
       });
     };
     init();
+    const CheckRoom = async function () {
+      const result = await isProtected(roomId);
+      if (result.status == "false") {
+        return;
+      } else {
+        return <Navigate to="/protected-room" state={roomId} />;
+      }
+    };
+    CheckRoom();
     return () => {
       socketRef.current.disconnect();
       socketRef.current.off(ACTIONS.JOINED);
@@ -98,7 +109,7 @@ const EditorPage = () => {
   }
 
   return (
-    <>
+    <Box>
       <div className="mainWrap">
         <div className="aside">
           <div className="asideInner">
@@ -124,7 +135,7 @@ const EditorPage = () => {
         <div className="editorWrap">
           <Box sx={{ flexGrow: 1 }}>
             <Grid container>
-              <Grid xs={7} md={8}>
+              <Grid xs={DisplayBoth ? 7 : 12} md={DisplayBoth ? 8 : 12}>
                 <Editor
                   socketRef={socketRef}
                   roomId={roomId}
@@ -133,16 +144,41 @@ const EditorPage = () => {
                   }}
                 />
               </Grid>
-              <Grid xs={5} md={4} divider={true}>
-                <EditorOutput />
-                <EditorConsole />
+              <Grid
+                xs={DisplayBoth ? 5 : 12}
+                md={DisplayBoth ? 4 : 12}
+                divider={true}
+              >
+                {DisplayBoth ? (
+                  <>
+                    {Terminal.show ? (
+                      Terminal.show ? (
+                        <EditorOutput height={421} />
+                      ) : (
+                        <EditorOutput height={35} />
+                      )
+                    ) : (
+                      <EditorOutput height={807} />
+                    )}
+                    {HTMLOutput.show ? (
+                      Terminal.show ? (
+                        <EditorConsole height={421} />
+                      ) : (
+                        <EditorConsole height={35} />
+                      )
+                    ) : (
+                      <EditorConsole height={807} />
+                    )}
+                  </>
+                ) : null}
               </Grid>
             </Grid>
           </Box>
         </div>
       </div>
+
       <BottomLayer />
-    </>
+    </Box>
   );
 };
 

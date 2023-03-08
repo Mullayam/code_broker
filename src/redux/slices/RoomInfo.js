@@ -15,5 +15,5 @@ export const RoomInfo = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { add } = RoomInfo.actions;
+export const { add, showEditor } = RoomInfo.actions;
 export default RoomInfo.reducer;

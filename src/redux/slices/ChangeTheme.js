@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const ChangeLanguage = createSlice({
-  name: "ChangeLanguage",
+export const ChangeTheme = createSlice({
+  name: "ChangeTheme",
   initialState: {
     activeTheme: "dracula",
   },
@@ -16,5 +16,5 @@ export const ChangeLanguage = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { UpdateTheme, Defaults } = ChangeLanguage.actions;
-export default ChangeLanguage.reducer;
+export const { UpdateTheme, Defaults } = ChangeTheme.actions;
+export default ChangeTheme.reducer;

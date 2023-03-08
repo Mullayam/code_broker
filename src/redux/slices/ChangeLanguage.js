@@ -6,8 +6,8 @@ export const ChangeLanguage = createSlice({
     currentLanguage: "javascript",
   },
   reducers: {
-    ChangeLang: (state, payload) => {
-      state.currentLanguage = payload.payload.language;
+    ChangeLang: (state, { payload }) => {
+      state.currentLanguage = payload.language;
     },
     Defaults: (state) => {
       return state;

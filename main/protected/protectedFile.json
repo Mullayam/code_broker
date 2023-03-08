@@ -1,11 +1,11 @@
 [
+   
     {     
+       "roomId": "f6aa1527-702c-4632-bc07-f8be1656987f",
+       "password": "test"
+    },
+     {     
        "roomId": "9de09f94-bb6f-4028-a49c-cd933af6627c" ,
        "password": "test"      
-    },
-    {     
-       "roomId": "8a863bd4-939c-43a4-a5d2-192bcbc832db",
-       "password": "12345678"      
-
     }
 ]

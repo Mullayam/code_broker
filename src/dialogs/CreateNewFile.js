@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -8,30 +8,46 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
-import axios from "axios";
+import { PostApi } from "../helpers/CallAPI";
+
 export default function NewFileForm({ newFileModal, setNewFileModal }) {
   const { RoomID, User } = useSelector((state) => state.RoomInfo);
   const [fileName, setFileName] = useState("");
   const handleClose = () => {
     setNewFileModal(false);
   };
+  useEffect(() => {
+    let RoomInfo = {
+      roomId: RoomID,
+      user: `@${User}`,
+    };
+    return async () => await PostApi("create/dir", { RoomInfo });
+  }, []);
 
   async function genrateNewFile() {
     let FileDetails = {
       name: fileName.split(".")[0],
       ext: fileName.split(".")[1],
     };
-    let EditorInfo = {
-      RoomID,
-      User,
+    let RoomInfo = {
+      roomId: RoomID,
+      user: `@${User}`,
     };
 
     if (fileName === "") return toast.error("Please enter a file name");
     if (!fileName.includes(".")) {
       return toast.error("Please choose a valid Extension");
     }
-    // const result = axios.post();
-    return toast.success("created");
+    const result = await PostApi("create/file", { FileDetails, RoomInfo });
+    if (result.data.status == "false") {
+      setFileName("");
+      setNewFileModal(false);
+      return toast.error(result.data.message);
+    } else {
+      setFileName("");
+      setNewFileModal(false);
+      return toast.success(result.data.message);
+    }
   }
 
   return (

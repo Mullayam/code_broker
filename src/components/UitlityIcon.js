@@ -11,12 +11,18 @@ import {
   InfoDialog,
   SaveFileDialog,
 } from "../dialogs/";
+import { CallApi } from "../helpers/CallAPI";
 export const SidebarIconComponent = ({ username }) => {
   const [newFileModal, setNewFileModal] = useState(false);
   const [downloadFileModal, setDownloadFileModal] = useState(false);
   const [editorSettings, setEditorSettings] = useState(false);
+  const [room, setRooms] = useState([]);
   // const [newFileModal, setNewFileModal] = useState(false);
-
+  async function GetAllFiles() {
+    const response = await CallApi(`allfiles/@${username}`, "GET", {});
+    setRooms(response.data.data);
+    setDownloadFileModal(`${response.data.status}`);
+  }
   return (
     <>
       <Box
@@ -33,7 +39,7 @@ export const SidebarIconComponent = ({ username }) => {
         />
 
         <DownloadForOfflineIcon
-          onClick={() => setDownloadFileModal(true)}
+          onClick={() => GetAllFiles()}
           fontSize="large"
           titleAccess="Download Files"
         />
@@ -50,8 +56,9 @@ export const SidebarIconComponent = ({ username }) => {
         setNewFileModal={setNewFileModal}
       />
       <DownloadFileDialog
+        rooms={room}
         openFileModal={downloadFileModal}
-        username={username}
+        user={username}
         handleFileModal={setDownloadFileModal}
       />
       <EditorCustomizaion
