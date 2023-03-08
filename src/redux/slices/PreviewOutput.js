@@ -18,7 +18,7 @@ export const RenderPreview = createSlice({
       state.Terminal.show = payload.payload;
     },
     ChangeOutputState: (state, payload) => {
-      state.Terminal.show = payload.payload;
+      state.HTMLOutput.show = payload.payload;
     },
     RenderOutput: (state, payload) => {
       state.DisplayBoth = payload.payload;

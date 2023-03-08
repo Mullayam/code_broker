@@ -7,6 +7,8 @@ import Client from "../components/Client";
 import Editor from "../components/Editor";
 import EditorOutput from "../components/EditorOutput";
 import EditorConsole from "../components/EditorConsole";
+import { RenderOutput } from "../redux/slices/PreviewOutput";
+
 import { initSocket } from "../socket";
 import {
   useLocation,
@@ -32,6 +34,7 @@ const EditorPage = () => {
     (state) => state.EditorStore.Console
   );
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(add({ roomId, user }));
     const init = async () => {
@@ -151,15 +154,13 @@ const EditorPage = () => {
               >
                 {DisplayBoth ? (
                   <>
-                    {Terminal.show ? (
-                      Terminal.show ? (
+                    {/* {Terminal.show ? (
+                      HTMLOutput.show ? (
                         <EditorOutput height={421} />
                       ) : (
                         <EditorOutput height={35} />
                       )
-                    ) : (
-                      <EditorOutput height={807} />
-                    )}
+                    ) : null}
                     {HTMLOutput.show ? (
                       Terminal.show ? (
                         <EditorConsole height={421} />
@@ -167,7 +168,37 @@ const EditorPage = () => {
                         <EditorConsole height={35} />
                       )
                     ) : (
-                      <EditorConsole height={807} />
+                      <EditorConsole height={802} />
+                    )} */}
+                    {HTMLOutput.show ? (
+                      <>
+                        {Terminal.show ? (
+                          <>
+                            <EditorOutput height={425} />
+                            <EditorConsole height={425} />
+                          </>
+                        ) : (
+                          <>
+                            <EditorOutput height={805} />
+                            <EditorConsole height={35} />
+                          </>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {Terminal.show ? (
+                          <>
+                            <EditorOutput height={35} />
+                            <EditorConsole height={805} />
+                          </>
+                        ) : (
+                          <>
+                            <EditorOutput height={35} />
+                            <EditorConsole height={35} />
+                            {dispatch(RenderOutput(false))}
+                          </>
+                        )}
+                      </>
                     )}
                   </>
                 ) : null}

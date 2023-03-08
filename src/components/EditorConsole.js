@@ -20,6 +20,7 @@ export default function EditorConsole({ height }) {
       sx={{
         width: "100%",
         height: height,
+        // height: { xs: 332, lg: 332, xl: 427 },
         color: "white",
         backgroundColor: "black",
       }}
@@ -75,10 +76,11 @@ export default function EditorConsole({ height }) {
         )}
       </Box>
       <Stack sx={{ p: 1, display: results }}>
-        <li className="terminal-output error">huis</li>
-        <li className="terminal-output warn">huis</li>
-        <li className="terminal-output">huis</li>
+        {/* <li className="terminal-output error">huis</li> */}
+        {/* <li className="terminal-output warn">huis</li> */}
+        <li className="terminal-output">Hello World</li>
       </Stack>
     </Box>
   );
 }
+ 

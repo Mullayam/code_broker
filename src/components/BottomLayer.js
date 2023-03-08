@@ -57,7 +57,7 @@ export default function BottomLayer() {
           justifyContent: "flex-end",
         }}
       >
-        <Item>Ln 51, Col 23</Item>
+        <Item>Ln 1, Col 28</Item>
         <Item>Spaces: 2</Item>
         <Item titleAccess="Font-Size">{EditorInfo.Font.fontSize}</Item>
         <Item titleAccess="Font-Familye">{EditorInfo.Font.fontFamily}</Item>
