@@ -218,6 +218,7 @@ class FileActivity {
       fs.readdirSync(`${CreateFileIn}/${username}`).map((fileName) => {
         return FileName.push(fileName);
       });
+
       return res.status(200).json({
         status: "true",
         message: "Some Room are Found For this username",
@@ -250,6 +251,10 @@ class FileActivity {
         message: error,
       });
     }
+  }
+  static async getFileInRoom(username, RoomId) {
+    let count = fs.readdirSync(`${CreateFileIn}/${username}/${RoomId}`);
+    return count;
   }
 }
 module.exports = FileActivity;

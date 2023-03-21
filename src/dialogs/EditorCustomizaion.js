@@ -16,24 +16,31 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import ThemeName from "../components/Theme";
-import {
-  ChangeLang,
-  Defaults as LangDefault,
-} from "../redux/slices/ChangeLanguage";
-import { UpdateTheme, Defaults } from "../redux/slices/ChangeTheme";
+import { ChangeLang } from "../redux/slices/ChangeLanguage";
+import { UpdateTheme } from "../redux/slices/ChangeTheme";
 import { UpdateFont, ChangeFontSize } from "../redux/slices/ChangeFont";
-
+import {
+  ChangeTerminalState,
+  ChangeOutputState,
+  RenderOutput,
+} from "../redux/slices/PreviewOutput";
+import { MakeProtected } from "../helpers/isProtected";
+import { toast } from "react-hot-toast";
+import { Typography } from "@mui/material";
 export default function EditorCustomization({
   editorSettings,
   setEditorSettings,
+  roomId,
+  info,
 }) {
   const dispatch = useDispatch();
   const { Console, Lang, Font, Theme } = useSelector(
     (state) => state.EditorStore
   );
-
-  const [passwordField, setPasswordField] = React.useState(false);
-
+  const [consoleLog, output] = [Console.Terminal.show, Console.HTMLOutput.show];
+  const [passwordField, setPasswordField] = React.useState(info);
+  const [passwordFieldChange, setPasswordFieldChange] =
+    React.useState("12345678");
   const handleClose = () => {
     setEditorSettings(false);
   };
@@ -44,6 +51,25 @@ export default function EditorCustomization({
     activeLanguage: Lang.currentLanguage,
   });
   React.useEffect(() => {}, [inputs]);
+  const handleConsoleAction = () => {
+    dispatch(ChangeTerminalState(!consoleLog));
+    dispatch(RenderOutput(true));
+  };
+  const handleOutputAction = () => {
+    dispatch(ChangeOutputState(!output));
+    dispatch(RenderOutput(true));
+  };
+  const handlePasswordChange = async () => {
+    if (passwordFieldChange == "") {
+      return toast.error(`Password is required`);
+    }
+    let roomInfo = {
+      RoomId: roomId,
+      Password: passwordFieldChange,
+    };
+    await MakeProtected(roomInfo);
+    toast.success("Password changed successfully");
+  };
   const handleChangeAction = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
     dispatch(UpdateFont({ fontFamily: inputs.fontFamily }));
@@ -175,8 +201,8 @@ export default function EditorCustomization({
                   sx={{ mt: 1 }}
                   control={
                     <Switch
-                      checked={true}
-                      //  onChange={handleFullWidthChange}
+                      checked={consoleLog}
+                      onChange={handleConsoleAction}
                     />
                   }
                   label="Preview Console"
@@ -184,16 +210,17 @@ export default function EditorCustomization({
                 <FormControlLabel
                   sx={{ mt: 1 }}
                   control={
-                    <Switch
-                      checked={true}
-                      //  onChange={handleFullWidthChange}
-                    />
+                    <Switch checked={output} onChange={handleOutputAction} />
                   }
                   label="Output"
                 />
                 <Box display="flex" flexDirection="column">
+                  <Typography variant="body2" sx={{ mt: 2 }}>
+                    {info && "Password Enabled for this room"}
+                  </Typography>
                   <FormControlLabel
                     sx={{ mt: 1 }}
+                    helperText="Works only On PC"
                     control={
                       <Switch
                         checked={passwordField}
@@ -207,9 +234,12 @@ export default function EditorCustomization({
                       required
                       id="standard-required"
                       label="Password Required"
-                      defaultValue={"12345678"}
+                      value={passwordFieldChange}
                       // className={classes.textField}
+                      onChange={(e) => setPasswordFieldChange(e.target.value)}
+                      onDoubleClick={handlePasswordChange}
                       margin="normal"
+                      helperText="Double Click to change/update password"
                     />
                   ) : null}
                 </Box>

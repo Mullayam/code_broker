@@ -14,7 +14,7 @@ export default function EditorConsole({ height }) {
     results = "none";
     reOpen = true;
   }
-  console.log(results, reOpen);
+  
   return (
     <Box
       sx={{
@@ -24,6 +24,7 @@ export default function EditorConsole({ height }) {
         color: "white",
         backgroundColor: "black",
       }}
+      className="EditorConsole"
     >
       <Box
         sx={{

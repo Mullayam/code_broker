@@ -1,14 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Unstable_Grid2";
+import { Box, Grid, IconButton } from "@mui/material";
 import toast from "react-hot-toast";
 import ACTIONS from "../Actions";
-import Client from "../components/Client";
-import Editor from "../components/Editor";
-import EditorOutput from "../components/EditorOutput";
-import EditorConsole from "../components/EditorConsole";
+import {
+  Client,
+  Editor,
+  EditorOutput,
+  EditorConsole,
+  RoomList,
+  UtilityIcon as SidebarIconComponent,
+} from "../components/";
 import { RenderOutput } from "../redux/slices/PreviewOutput";
-
+import { EnterPassword } from "../dialogs";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { initSocket } from "../socket";
 import {
   useLocation,
@@ -17,10 +22,13 @@ import {
   useParams,
 } from "react-router-dom";
 import BottomLayer from "../components/BottomLayer";
-import { SidebarIconComponent } from "../components/UitlityIcon";
+
 import { useDispatch, useSelector } from "react-redux";
 import { add } from "../redux/slices/RoomInfo";
 import { isProtected } from "../helpers/isProtected";
+import { ClickAwayListener } from "@mui/material";
+import { BackGOpcacity } from "../redux/slices/ChangeTheme";
+import { Stack } from "@mui/system";
 
 const EditorPage = () => {
   const socketRef = useRef(null);
@@ -30,9 +38,11 @@ const EditorPage = () => {
   const { roomId } = useParams();
   const reactNavigator = useNavigate();
   const [clients, setClients] = useState([]);
-  const { Terminal, HTMLOutput, DisplayBoth } = useSelector(
-    (state) => state.EditorStore.Console
-  );
+  const [passwordFieldOpen, setPasswordFieldOpen] = React.useState(true);
+
+  const { Theme, Console } = useSelector((state) => state.EditorStore);
+  const [info, setInfo] = useState(false);
+  const { Terminal, HTMLOutput, DisplayBoth } = Console;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -80,10 +90,14 @@ const EditorPage = () => {
     init();
     const CheckRoom = async function () {
       const result = await isProtected(roomId);
+
       if (result.status == "false") {
+        setPasswordFieldOpen(false);
         return;
       } else {
-        return <Navigate to="/protected-room" state={roomId} />;
+        setInfo(true);
+        dispatch(BackGOpcacity("0.1"));
+        setPasswordFieldOpen(true);
       }
     };
     CheckRoom();
@@ -112,14 +126,18 @@ const EditorPage = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{ opacity: Theme.opacity }}>
       <div className="mainWrap">
         <div className="aside">
           <div className="asideInner">
             <div className="logo">
               <img className="logoImage" src="/code-sync.png" alt="logo" />
             </div>
-            <SidebarIconComponent username={location.state.username || null} />
+            <SidebarIconComponent
+              username={location.state.username || null}
+              roomId={roomId}
+              info={info}
+            />
             <h3>Connected</h3>
             <div className="clientsList">
               {clients.map((client) => (
@@ -127,12 +145,26 @@ const EditorPage = () => {
               ))}
             </div>
           </div>
-          <button className="btn copyBtn" onClick={copyRoomId}>
-            Copy ROOM ID
-          </button>
-          <button className="btn leaveBtn" onClick={leaveRoom}>
-            Leave
-          </button>
+
+          <Box flexDirection="row">
+            <Stack>
+              <RoomList />
+            </Stack>
+            <IconButton size="large" onClick={copyRoomId}>
+              <ContentCopyIcon
+                titleAccess="Copy Room Id"
+                fontSize="large"
+                color="primary"
+              />
+            </IconButton>
+            <IconButton size="large" onClick={leaveRoom}>
+              <ExitToAppIcon
+                titleAccess="Leave Room"
+                fontSize="large"
+                color="error"
+              />
+            </IconButton>
+          </Box>
         </div>
 
         <div className="editorWrap">
@@ -154,32 +186,16 @@ const EditorPage = () => {
               >
                 {DisplayBoth ? (
                   <>
-                    {/* {Terminal.show ? (
-                      HTMLOutput.show ? (
-                        <EditorOutput height={421} />
-                      ) : (
-                        <EditorOutput height={35} />
-                      )
-                    ) : null}
-                    {HTMLOutput.show ? (
-                      Terminal.show ? (
-                        <EditorConsole height={421} />
-                      ) : (
-                        <EditorConsole height={35} />
-                      )
-                    ) : (
-                      <EditorConsole height={802} />
-                    )} */}
                     {HTMLOutput.show ? (
                       <>
                         {Terminal.show ? (
                           <>
-                            <EditorOutput height={425} />
-                            <EditorConsole height={425} />
+                            <EditorOutput height={421} />
+                            <EditorConsole height={421} />
                           </>
                         ) : (
                           <>
-                            <EditorOutput height={805} />
+                            <EditorOutput height={806} />
                             <EditorConsole height={35} />
                           </>
                         )}
@@ -189,7 +205,7 @@ const EditorPage = () => {
                         {Terminal.show ? (
                           <>
                             <EditorOutput height={35} />
-                            <EditorConsole height={805} />
+                            <EditorConsole height={806} />
                           </>
                         ) : (
                           <>
@@ -209,6 +225,14 @@ const EditorPage = () => {
       </div>
 
       <BottomLayer />
+
+      <ClickAwayListener>
+        <EnterPassword
+          open={passwordFieldOpen}
+          setOpen={setPasswordFieldOpen}
+          clientRoomId={roomId}
+        />
+      </ClickAwayListener>
     </Box>
   );
 };

@@ -27,7 +27,10 @@ function App() {
             path="/editor/:roomId/:username"
             element={<EditorPage />}
           ></Route>
-          <Route path="protected-room" element={<ProtectedPage />}></Route>
+          <Route
+            path="/protected-room/:roomId/:username"
+            element={<ProtectedPage />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </>

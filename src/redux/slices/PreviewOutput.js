@@ -24,7 +24,8 @@ export const RenderPreview = createSlice({
       state.DisplayBoth = payload.payload;
     },
     Default: (state) => {
-      return state;
+       
+      return { ...state };
     },
   },
 });

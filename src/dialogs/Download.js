@@ -12,9 +12,8 @@ import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
 import RoomPreferencesIcon from "@mui/icons-material/RoomPreferences";
 import { blue } from "@mui/material/colors";
-import { PostApi } from "../helpers/CallAPI";
-import { Box } from "@mui/material";
-import { Test } from "./Test";
+import { Box, IconButton } from "@mui/material";
+import { DeleteForeverRounded } from "@mui/icons-material";
 
 function FilesDialogRaw(props) {
   const {
@@ -66,8 +65,23 @@ export default function DownloadFileDialog({
   return (
     <div>
       <Dialog onClose={handleModalClose} open={openFileModal}>
-        <DialogTitle>Check Files in Rooms for {user} </DialogTitle>
-
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <DialogTitle>
+            <i>
+              <b>{user} </b>
+            </i>
+            Rooms
+          </DialogTitle>
+          <IconButton onClick={() => alert("This will delete your rooms")}>
+            <DeleteForeverRounded sx={{ color: "red" }} />
+          </IconButton>
+        </Box>
         <Box
           sx={{
             width: "100%",
@@ -76,15 +90,17 @@ export default function DownloadFileDialog({
           }}
         >
           <List component="div" role="group">
-            {rooms.map((rooms) => (
+            {rooms.map((rooms, i) => (
               <ListItem
+                key={i}
                 button
                 divider
                 aria-haspopup="true"
                 aria-controls="room-id"
                 aria-label={rooms}
                 onClick={() => {
-                  handleRoomFiles(rooms);
+                  // handleRoomFiles(rooms);
+                  alert("input api");
                 }}
               >
                 <ListItemAvatar>
@@ -96,11 +112,11 @@ export default function DownloadFileDialog({
               </ListItem>
             ))}
 
-            <FilesDialogRaw
+            {/* <FilesDialogRaw
               keepMounted
               open={open}
               onClose={handleRoomFilesClose}
-            />
+            /> */}
           </List>
         </Box>
       </Dialog>

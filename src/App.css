@@ -2,7 +2,7 @@
 
 body,html {
     font-family: 'Noto Sans', 'Nunito Sans';
-   
+
 }
 
 li {
@@ -27,6 +27,12 @@ li {
     justify-content: center;
     color: #fff;
     height: 100vh;
+    -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    
+        background-image:
+            radial-gradient(at 47% 33%, hsl(162.00, 77%, 40%) 0, transparent 59%),
+            radial-gradient(at 82% 65%, hsl(198.00, 100%, 50%) 0, transparent 55%);
     
 }
 
@@ -44,12 +50,12 @@ li {
         border: 1px solid rgba(209, 213, 219, 0.3);
 }
 
-.footer {
+footer {
     position: fixed;
     bottom: 0;
 }
 
-.footer a {
+footer a {
     color: #4aee88;
 }
 
@@ -116,6 +122,7 @@ li {
     text-decoration: none;
     border-bottom: 1px solid #4aed88;
     transition: all 0.3s ease-in-out;
+    cursor: pointer;
 }
 
 .createNewBtn:hover,
@@ -128,6 +135,7 @@ footer a:hover {
 .mainWrap {
     display: grid;
     grid-template-columns: 230px 1fr;
+    
 }
 
 .aside {
@@ -179,3 +187,26 @@ footer a:hover {
     padding-top: 10px;
     }
 
+@media screen and (min-width: 1387) {
+    .EditorConsole {
+        min-height: '427' !important;
+    }
+}
+
+@media screen and (min-width: 900) {
+    .CodeMirror {
+        min-height: calc(95vh - 20px) !important;
+    }
+}
+
+@media screen and (min-width: 600) {
+    .CodeMirror {
+        min-height: calc(92vh - 20px) !important;
+    }
+}
+
+@media screen and (min-width: 480) {
+    .CodeMirror {
+        min-height: calc(90vh - 20px) !important;
+    }
+}

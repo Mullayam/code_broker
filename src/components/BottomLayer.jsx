@@ -4,7 +4,11 @@ import Box from "@mui/material/Box";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useDispatch, useSelector } from "react-redux";
-import { RenderOutput } from "../redux/slices/PreviewOutput";
+import {
+  RenderOutput,
+  ChangeTerminalState,
+  ChangeOutputState,
+} from "../redux/slices/PreviewOutput";
 function Item(props) {
   const { sx, ...other } = props;
   return (
@@ -42,9 +46,12 @@ Item.propTypes = {
 export default function BottomLayer() {
   const EditorInfo = useSelector((state) => state.EditorStore);
   const dispatch = useDispatch();
-  let Preview = EditorInfo.Console.DisplayBoth;
+  let { DisplayBoth } = EditorInfo.Console;
+
   const handleOutputs = () => {
-    dispatch(RenderOutput(!Preview));
+    dispatch(RenderOutput(!DisplayBoth));
+    dispatch(ChangeTerminalState(true));
+    dispatch(ChangeOutputState(true));
   };
   return (
     <div style={{ width: "100%" }}>

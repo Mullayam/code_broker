@@ -11,4 +11,10 @@ const isVerified = async (clientPassword, clientRoomId) => {
   });
   return response.data;
 };
-export { isProtected, isVerified };
+const MakeProtected = async (roomInfo) => {
+  let response = await PostApi(`set/protect-room`, {
+    roomInfo,
+  });
+  return response.data;
+};
+export { isProtected, isVerified, MakeProtected };

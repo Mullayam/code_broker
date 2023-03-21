@@ -1,23 +1,23 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { EnterPassword } from "../dialogs";
-
+import { isProtected } from "../helpers/isProtected";
 const ProtectedPage = () => {
-  const [passwordFieldOpen, setPasswordFieldOpen] = React.useState(true);
+  const user = location.state?.username;
+  const { roomId } = React.useParams();
+  const reactNavigator = React.useNavigate();
   const location = useLocation();
-  const roomId = location.state.roomId;
+  const CheckRoom = async function () {
+    const result = await isProtected(roomId);
+    if (result.status == "false") {
+      return;
+    } else {
+      // return <reactNavigator to="/editor/" state={(roomId, user)} />;
+    }
+  };
+  CheckRoom();
   // setPasswordFieldOpen(true);
   // return toast.error(result.message);
-  return (
-    <div>
-      ProtectedPage
-      <EnterPassword
-        open={passwordFieldOpen}
-        setOpen={setPasswordFieldOpen}
-        clientRoomId={roomId}
-      />
-    </div>
-  );
+  return <div></div>;
 };
 
 export default ProtectedPage;

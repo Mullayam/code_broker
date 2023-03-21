@@ -4,20 +4,21 @@ import FiberNewIcon from "@mui/icons-material/FiberNew";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import LogoDevIcon from "@mui/icons-material/LogoDev";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
+
 import {
   NewFileForm,
   DownloadFileDialog,
   EditorCustomizaion,
   InfoDialog,
   SaveFileDialog,
-} from "../dialogs/";
+} from "../dialogs";
 import { CallApi } from "../helpers/CallAPI";
-export const SidebarIconComponent = ({ username }) => {
+export default function UtilityIcon({ username, roomId, info }) {
   const [newFileModal, setNewFileModal] = useState(false);
   const [downloadFileModal, setDownloadFileModal] = useState(false);
   const [editorSettings, setEditorSettings] = useState(false);
   const [room, setRooms] = useState([]);
-  // const [newFileModal, setNewFileModal] = useState(false);
+
   async function GetAllFiles() {
     const response = await CallApi(`allfiles/@${username}`, "GET", {});
     setRooms(response.data.data);
@@ -41,7 +42,7 @@ export const SidebarIconComponent = ({ username }) => {
         <DownloadForOfflineIcon
           onClick={() => GetAllFiles()}
           fontSize="large"
-          titleAccess="Download Files"
+          titleAccess="See Your Room"
         />
         <LogoDevIcon fontSize="large" titleAccess="Run Dev Test" />
         <DisplaySettingsIcon
@@ -64,9 +65,11 @@ export const SidebarIconComponent = ({ username }) => {
       <EditorCustomizaion
         editorSettings={editorSettings}
         setEditorSettings={setEditorSettings}
+        roomId={roomId}
+        info={info}
       />
       {/* <InfoDialog />
       <SaveFileDialog /> */}
     </>
   );
-};
+}

@@ -4,10 +4,14 @@ export const ChangeTheme = createSlice({
   name: "ChangeTheme",
   initialState: {
     activeTheme: "dracula",
+    opacity: 1,
   },
   reducers: {
     UpdateTheme: (state, payload) => {
       state.activeTheme = payload.payload.theme;
+    },
+    BackGOpcacity: (state, payload) => {
+      state.opacity = payload.payload;
     },
     Defaults: (state) => {
       return state;
@@ -16,5 +20,5 @@ export const ChangeTheme = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { UpdateTheme, Defaults } = ChangeTheme.actions;
+export const { UpdateTheme, BackGOpcacity, Defaults } = ChangeTheme.actions;
 export default ChangeTheme.reducer;
