@@ -20,7 +20,11 @@ export default function UtilityIcon({ username, roomId, info }) {
   const [room, setRooms] = useState([]);
 
   async function GetAllFiles() {
-    const response = await CallApi(`allfiles/@${username}`, "GET", {});
+    const response = await CallApi(
+      `allfiles/${roomId}/@${username}`,
+      "GET",
+      {}
+    );
     setRooms(response.data.data);
     setDownloadFileModal(`${response.data.status}`);
   }
@@ -34,23 +38,31 @@ export default function UtilityIcon({ username, roomId, info }) {
       >
         {/* Modal Open Clicks */}
         <FiberNewIcon
+          className="cursor-pointer"
           onClick={() => setNewFileModal(true)}
           fontSize="large"
-          titleAccess="Create New File"
+          titleaccess="Create New File"
         />
 
         <DownloadForOfflineIcon
+          className="cursor-pointer"
           onClick={() => GetAllFiles()}
           fontSize="large"
-          titleAccess="See Your Room"
+          titleaccess="See Your Room"
         />
-        <LogoDevIcon fontSize="large" titleAccess="Run Dev Test" />
+        <LogoDevIcon
+          className="cursor-pointer"
+          fontSize="large"
+          titleaccess="Run Dev Test"
+        />
         <DisplaySettingsIcon
+          className="cursor-pointer"
           onClick={() => setEditorSettings(true)}
           fontSize="large"
-          titleAccess="Editor Settings"
+          titleaccess="Editor Settings"
         />
       </Box>
+
       {/* Modals */}
       <NewFileForm
         newFileModal={newFileModal}
@@ -59,7 +71,6 @@ export default function UtilityIcon({ username, roomId, info }) {
       <DownloadFileDialog
         rooms={room}
         openFileModal={downloadFileModal}
-        user={username}
         handleFileModal={setDownloadFileModal}
       />
       <EditorCustomizaion

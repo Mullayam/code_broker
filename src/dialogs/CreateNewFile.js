@@ -16,14 +16,7 @@ export default function NewFileForm({ newFileModal, setNewFileModal }) {
   const handleClose = () => {
     setNewFileModal(false);
   };
-  useEffect(() => {
-    let RoomInfo = {
-      roomId: RoomID,
-      user: `@${User}`,
-    };
-    return async () => await PostApi("create/dir", { RoomInfo });
-  }, []);
-
+  
   async function genrateNewFile() {
     let FileDetails = {
       name: fileName.split(".")[0],

@@ -9,6 +9,7 @@ import {
   ChangeTerminalState,
   ChangeOutputState,
 } from "../redux/slices/PreviewOutput";
+import { Stack } from "@mui/material";
 function Item(props) {
   const { sx, ...other } = props;
   return (
@@ -23,7 +24,7 @@ function Item(props) {
         border: "1px solid",
         borderColor: (theme) =>
           theme.palette.mode === "dark" ? "grey.800" : "grey.300",
-        borderRadius: 2,
+        borderRadius: 15,
         fontSize: "0.875rem",
         fontWeight: "700",
         ...sx,
@@ -54,31 +55,58 @@ export default function BottomLayer() {
     dispatch(ChangeOutputState(true));
   };
   return (
-    <div style={{ width: "100%" }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          bgcolor: "background.paper",
-          borderRadius: 1,
-          justifyContent: "flex-end",
-        }}
-      >
-        <Item>Ln 1, Col 28</Item>
-        <Item>Spaces: 2</Item>
-        <Item titleAccess="Font-Size">{EditorInfo.Font.fontSize}</Item>
-        <Item titleAccess="Font-Familye">{EditorInfo.Font.fontFamily}</Item>
-        <Item titleAccess="Current Language">
-          {EditorInfo.Lang.currentLanguage}
-        </Item>
-        <TerminalIcon
-          sx={{ m: 1 }}
-          fontSize="large"
-          titleAccess="Preview Console"
-          onClick={handleOutputs}
-        />
-        <PlayArrowIcon sx={{ m: 1 }} fontSize="large" titleAccess="Run Code" />
+    <Box component="div">
+      <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}>
+        <Stack
+          sx={{
+            flexDirection: "row",
+            bgcolor: "background.paper",
+
+            justifyContent: "flex-start",
+          }}
+        >
+          <Item>Ln 1, Col 28</Item>
+        </Stack>
+        <Stack
+          sx={{
+            flexDirection: "row",
+            bgcolor: "background.paper",
+
+            justifyContent: "center",
+          }}
+        >
+          <Item>Ln 1, Col 28</Item>
+          <Item>Spaces: 2</Item>
+          <Item titleaccess="Font-Size">{EditorInfo.Font.fontSize}</Item>
+          <Item titleaccess="Font-Familye">{EditorInfo.Font.fontFamily}</Item>
+          <Item titleaccess="Current Language">
+            {EditorInfo.Lang.currentLanguage}
+          </Item>
+        </Stack>
+        <Stack
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            bgcolor: "background.paper",
+
+            justifyContent: "flex-end",
+          }}
+        >
+          <TerminalIcon
+            sx={{ m: 1 }}
+            className="cursor-pointer"
+            fontSize="large"
+            titleaccess="Preview Console"
+            onClick={handleOutputs}
+          />
+          <PlayArrowIcon
+            className="cursor-pointer"
+            sx={{ m: 1 }}
+            fontSize="large"
+            titleaccess="Run Code"
+          />
+        </Stack>
       </Box>
-    </div>
+    </Box>
   );
 }

@@ -19,8 +19,13 @@ const options = ["None"];
 function ConfirmationDialogRaw(props) {
   const { onClose, value: valueProp, open, ...other } = props;
   const [value, setValue] = React.useState(valueProp);
+  const [room, setRooms] = React.useState([]);
   const radioGroupRef = React.useRef(null);
-
+  async function GetAllFiles() {
+    const response = await CallApi(`allfiles/@${username}`, "GET", {});
+    setRooms(response.data.data);
+    setDownloadFileModal(`${response.data.status}`);
+  }
   React.useEffect(() => {
     if (!open) {
       setValue(valueProp);
@@ -53,7 +58,7 @@ function ConfirmationDialogRaw(props) {
       open={open}
       {...other}
     >
-      <DialogTitle>Phone Ringtone</DialogTitle>
+      <DialogTitle>Your Files in this Room</DialogTitle>
       <DialogContent dividers>
         <RadioGroup
           ref={radioGroupRef}
@@ -135,7 +140,7 @@ export default function RoomList({ show = "false" }) {
           ))}
 
         <ConfirmationDialogRaw
-          id="ringtone-menu"
+          id="files-menus"
           keepMounted
           open={open}
           onClose={handleClose}

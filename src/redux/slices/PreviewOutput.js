@@ -21,10 +21,10 @@ export const RenderPreview = createSlice({
       state.HTMLOutput.show = payload.payload;
     },
     RenderOutput: (state, payload) => {
+      
       state.DisplayBoth = payload.payload;
     },
     Default: (state) => {
-       
       return { ...state };
     },
   },

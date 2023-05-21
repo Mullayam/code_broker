@@ -48,10 +48,14 @@ function FilesDialogRaw(props) {
 export default function DownloadFileDialog({
   openFileModal,
   handleFileModal,
-  user,
+
   rooms,
 }) {
+  
   const handleModalClose = (value) => {
+    handleFileModal(false);
+  };
+  const handleDelete = (value) => {
     handleFileModal(false);
   };
 
@@ -72,14 +76,13 @@ export default function DownloadFileDialog({
             justifyContent: "space-between",
           }}
         >
-          <DialogTitle>
-            <i>
-              <b>{user} </b>
-            </i>
-            Rooms
-          </DialogTitle>
-          <IconButton onClick={() => alert("This will delete your rooms")}>
-            <DeleteForeverRounded sx={{ color: "red" }} />
+          <DialogTitle sx={{ height: 10 }}>Your Files</DialogTitle>
+          <IconButton onClick={handleDelete}>
+            <DeleteForeverRounded
+              sx={{
+                color: "red",
+              }}
+            />
           </IconButton>
         </Box>
         <Box
@@ -97,9 +100,9 @@ export default function DownloadFileDialog({
                 divider
                 aria-haspopup="true"
                 aria-controls="room-id"
-                aria-label={rooms}
+                aria-label={rooms.filename}
                 onClick={() => {
-                  // handleRoomFiles(rooms);
+                  handleRoomFiles(rooms);
                   alert("input api");
                 }}
               >
@@ -108,7 +111,10 @@ export default function DownloadFileDialog({
                     <RoomPreferencesIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={rooms} secondary="5 Files" />
+                <ListItemText
+                  primary={rooms.fileName}
+                  // secondary={rooms.filesInRoom + " Files"}
+                />
               </ListItem>
             ))}
 

@@ -15,7 +15,7 @@ app.use(
     "allow-origin": "*",
   })
 );
-app.use(express.static("build"));
+// app.use(express.static("build"));
 // app.use((req, res, next) => {
 //   res.sendFile(path.join(__dirname, "build", "index.html"));
 // });
@@ -36,10 +36,12 @@ function getAllConnectedClients(roomId) {
 
 io.on("connection", (socket) => {
   console.log("socket connected", socket.id);
+
   socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
     userSocketMap[socket.id] = username;
     socket.join(roomId);
     const clients = getAllConnectedClients(roomId);
+
     clients.forEach(({ socketId }) => {
       io.to(socketId).emit(ACTIONS.JOINED, {
         clients,
@@ -69,8 +71,9 @@ io.on("connection", (socket) => {
     socket.leave();
   });
 });
-app.listen(3001, () => {
-  console.log(`APi Services running on port http://localhost:3001`);
+app.listen(9600, () => {
+  console.log(`APi  running on port 9600`);
 });
-const PORT = process.env.PORT || 5000;
+
+const PORT = process.env.PORT || 9500;
 server.listen(PORT, () => console.log(`Socket running on port ${PORT}`));

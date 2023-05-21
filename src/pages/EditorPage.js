@@ -152,14 +152,14 @@ const EditorPage = () => {
             </Stack>
             <IconButton size="large" onClick={copyRoomId}>
               <ContentCopyIcon
-                titleAccess="Copy Room Id"
+                titleaccess="Copy Room Id"
                 fontSize="large"
                 color="primary"
               />
             </IconButton>
             <IconButton size="large" onClick={leaveRoom}>
               <ExitToAppIcon
-                titleAccess="Leave Room"
+                titleaccess="Leave Room"
                 fontSize="large"
                 color="error"
               />
@@ -182,7 +182,7 @@ const EditorPage = () => {
               <Grid
                 xs={DisplayBoth ? 5 : 12}
                 md={DisplayBoth ? 4 : 12}
-                divider={true}
+                divider={true.toString()}
               >
                 {DisplayBoth ? (
                   <>
@@ -190,12 +190,12 @@ const EditorPage = () => {
                       <>
                         {Terminal.show ? (
                           <>
-                            <EditorOutput height={421} />
+                            <EditorOutput height={401} />
                             <EditorConsole height={421} />
                           </>
                         ) : (
                           <>
-                            <EditorOutput height={806} />
+                            <EditorOutput height={800} />
                             <EditorConsole height={35} />
                           </>
                         )}
@@ -204,14 +204,14 @@ const EditorPage = () => {
                       <>
                         {Terminal.show ? (
                           <>
-                            <EditorOutput height={35} />
-                            <EditorConsole height={806} />
+                            <EditorOutput height={30} />
+                            <EditorConsole height={800} />
                           </>
                         ) : (
                           <>
                             <EditorOutput height={35} />
                             <EditorConsole height={35} />
-                            {dispatch(RenderOutput(false))}
+                            {dispatch(RenderOutput("false"))}
                           </>
                         )}
                       </>

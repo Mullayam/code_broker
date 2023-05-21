@@ -1,21 +1,22 @@
 const path = require("path");
 const fs = require("fs");
+const { exitCode } = require("process");
 
-let CreateFileIn = path.join(__dirname, "createdFiles");
+let CreateFileIn = path.join(__dirname, "createdRooms");
 
 async function ExistDir(Username, RoomID) {
-  let TempFiles = path.join(__dirname, "createdFiles", Username);
+  let TempFiles = path.join(__dirname, "createdRooms");
   let createdDir = false;
   try {
     if (!fs.existsSync(`${TempFiles}`)) {
-      if (!fs.existsSync(`${TempFiles}/${RoomID}`)) {
-        fs.mkdirSync(`${TempFiles}/${RoomID}`, { recursive: true });
+      if (!fs.existsSync(`${TempFiles}/${RoomID}/${Username}`)) {
+        fs.mkdirSync(`${TempFiles}/${RoomID}/${Username}`, { recursive: true });
       } else {
         createdDir = true;
         return createdDir;
       }
     } else {
-      fs.mkdirSync(`${TempFiles}/${RoomID}`, { recursive: true });
+      fs.mkdirSync(`${TempFiles}/${RoomID}/${Username}`, { recursive: true });
       createdDir = true;
       return createdDir;
     }
@@ -27,41 +28,59 @@ async function ExistDir(Username, RoomID) {
 async function ExistFile(userFilePath, fileName) {
   let checkingDir = path.join(
     __dirname,
-    `createdFiles/${userFilePath}`,
+    `createdRooms/${userFilePath}`,
     fileName
   );
 
-  if (!fs.existsSync(`${checkingDir}`)) {
-    return false;
-  } else {
+  if (fs.existsSync(checkingDir)) {
     return true;
+  } else {
+    return false;
   }
 }
 async function PreloadedCode(Extension) {
   switch (Extension) {
     case "js":
       return 'console.log("Hello")';
+    case "php":
+      return '<?php echo "Hello Guys" ?>';
 
     default:
       return "Welcome To RealTime Editor";
   }
 }
+
 class FileActivity {
   static async createNewDir(req, res) {
     const {
       RoomInfo: { roomId, user },
     } = req.body;
-    let DirectoryToBeCreated = await ExistDir(user, roomId);
-    if (typeof DirectoryToBeCreated === "undefined") {
+    const dirCheck = await fs.readdirSync(`${CreateFileIn}/${roomId}`);
+    if (dirCheck.length > 9) {
+      if (dirCheck.includes(user)) {
+        return res.status(200).json({
+          code: "02",
+          message: "",
+        });
+      }
       return res.status(200).json({
-        status: "true",
-        message: "New Directory Created",
+        code: "01",
+        message: "This Room is full(9) of users,Please Join/Create Other",
       });
     } else {
-      return res.status(200).json({
-        status: "false",
-        message: "Directory Already Exists",
-      });
+      let DirectoryToBeCreated = await ExistDir(user, roomId);
+
+      if (typeof DirectoryToBeCreated === "undefined") {
+        return res.status(200).json({
+          status: "true",
+          message: "New Directory Created",
+        });
+      } else {
+        return res.status(200).json({
+          status: "false",
+          message: "Directory Already Exists",
+        });
+      }
     }
   }
   static async createNewFile(req, res) {
@@ -70,30 +89,26 @@ class FileActivity {
       RoomInfo: { roomId, user },
     } = req.body;
     let FullFileName = `${name}.${ext}`;
-    let DirectoryToBeCreated = await ExistDir(user, roomId);
-    if (DirectoryToBeCreated) {
-      let loadData = await PreloadedCode(ext);
-      let FileExistOrNot = await ExistFile(`${user}/${roomId}`, FullFileName);
-      if (FileExistOrNot) {
-        return res.status(200).json({
-          status: "false",
-          message: "File Already Exists",
-        });
-      }
-      await fs.writeFileSync(
-        `${CreateFileIn}/${user}/${roomId}/${FullFileName}`,
-        loadData
-      );
+
+    let loadData = await PreloadedCode(ext);
+    let FileExistOrNot = await ExistFile(`${roomId}/${user}`, FullFileName);
+
+    if (FileExistOrNot) {
       return res.status(200).json({
-        status: "true",
-        message: "File Created",
+        status: "false",
+        message: "File Already Exists",
       });
     } else {
-      return res.status(500).json({
-        status: "false",
-        message: "Something Went Wrong",
-      });
+      await fs.writeFileSync(
+        `${CreateFileIn}/${roomId}/${user}/${FullFileName}`,
+        loadData
+      );
     }
+
+    return res.status(200).json({
+      status: "true",
+      message: "File Created",
+    });
   }
   static async genrateOutput(req, res) {}
   static async readFileContent(req, res) {
@@ -212,17 +227,21 @@ class FileActivity {
     }
   }
   static async getAllRooms(req, res) {
-    const { username } = req.params;
-    let FileName = [];
+    const { roomId, username } = req.params;
+    let Files = [];
     try {
-      fs.readdirSync(`${CreateFileIn}/${username}`).map((fileName) => {
-        return FileName.push(fileName);
-      });
-
+      fs.readdirSync(`${CreateFileIn}/${roomId}/${username}`).map(
+        (fileName) => {
+          Files.push({
+            fileName,
+          });
+          return Files;
+        }
+      );
       return res.status(200).json({
         status: "true",
         message: "Some Room are Found For this username",
-        data: FileName,
+        data: Files,
       });
     } catch (error) {
       return res.status(500).json({

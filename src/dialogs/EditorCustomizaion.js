@@ -24,7 +24,7 @@ import {
   ChangeOutputState,
   RenderOutput,
 } from "../redux/slices/PreviewOutput";
-import { MakeProtected } from "../helpers/isProtected";
+import { MakeProtected, deletePasswordFile } from "../helpers/isProtected";
 import { toast } from "react-hot-toast";
 import { Typography } from "@mui/material";
 export default function EditorCustomization({
@@ -34,11 +34,14 @@ export default function EditorCustomization({
   info,
 }) {
   const dispatch = useDispatch();
-  const { Console, Lang, Font, Theme } = useSelector(
+  const { Console, Lang, Font, Theme, Protected } = useSelector(
     (state) => state.EditorStore
   );
+
   const [consoleLog, output] = [Console.Terminal.show, Console.HTMLOutput.show];
-  const [passwordField, setPasswordField] = React.useState(info);
+  const [passwordField, setPasswordField] = React.useState(
+    Protected.isProtected
+  );
   const [passwordFieldChange, setPasswordFieldChange] =
     React.useState("12345678");
   const handleClose = () => {
@@ -72,10 +75,23 @@ export default function EditorCustomization({
   };
   const handleChangeAction = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
+
     dispatch(UpdateFont({ fontFamily: inputs.fontFamily }));
     dispatch(ChangeFontSize({ fontSize: inputs.fontSize }));
     dispatch(UpdateTheme({ theme: inputs.theme }));
     dispatch(ChangeLang({ language: inputs.activeLanguage }));
+  };
+  const handleFontChangeAction = (e) => {
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
+    dispatch(UpdateFont({ fontFamily: inputs.fontFamily }));
+  };
+  const handlePasswordEnabledOrNot = async () => {
+    if (!passwordField) {
+    } else {
+      const response = await deletePasswordFile(roomId);
+      console.log(response);
+    }
+    setPasswordField(!passwordField);
   };
   return (
     <React.Fragment>
@@ -114,7 +130,7 @@ export default function EditorCustomization({
                     <Select
                       autoFocus
                       value={inputs.fontFamily}
-                      onChange={handleChangeAction}
+                      onChange={handleFontChangeAction}
                       label="Font Family"
                       inputProps={{
                         name: "fontFamily",
@@ -173,9 +189,7 @@ export default function EditorCustomization({
                   </FormControl>
                   {/* Change Lanuguage */}
                   <FormControl sx={{ mt: 2, minWidth: 280 }}>
-                    <InputLabel htmlFor="language">
-                      Languages Support
-                    </InputLabel>
+                    <InputLabel htmlFor="language">Language</InputLabel>
                     <Select
                       autoFocus
                       value={inputs.activeLanguage}
@@ -220,27 +234,37 @@ export default function EditorCustomization({
                   </Typography>
                   <FormControlLabel
                     sx={{ mt: 1 }}
-                    helperText="Works only On PC"
+                    helpertext="Works only On PC"
                     control={
                       <Switch
                         checked={passwordField}
-                        onChange={() => setPasswordField(!passwordField)}
+                        onChange={handlePasswordEnabledOrNot}
                       />
                     }
                     label="Password Protected"
                   />
+
                   {passwordField ? (
-                    <TextField
-                      required
-                      id="standard-required"
-                      label="Password Required"
-                      value={passwordFieldChange}
-                      // className={classes.textField}
-                      onChange={(e) => setPasswordFieldChange(e.target.value)}
-                      onDoubleClick={handlePasswordChange}
-                      margin="normal"
-                      helperText="Double Click to change/update password"
-                    />
+                    <>
+                      <TextField
+                        required
+                        id="standard-required"
+                        label="Password Required"
+                        value={passwordFieldChange}
+                        // className={classes.textField}
+                        onChange={(e) => setPasswordFieldChange(e.target.value)}
+                        margin="normal"
+                      />
+                      <small>
+                        <Button
+                          size="small"
+                          onClick={handlePasswordChange}
+                          variant="outlined"
+                        >
+                          Save
+                        </Button>
+                      </small>
+                    </>
                   ) : null}
                 </Box>
               </Grid>

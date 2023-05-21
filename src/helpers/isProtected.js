@@ -17,4 +17,10 @@ const MakeProtected = async (roomInfo) => {
   });
   return response.data;
 };
-export { isProtected, isVerified, MakeProtected };
+const deletePasswordFile = async (roomID) => {
+  let response = await PostApi(`delete/protected-room`, {
+    roomID,
+  });
+  return response.data;
+};
+export { isProtected, isVerified, MakeProtected, deletePasswordFile };

@@ -1,5 +1,8 @@
 import axios from "axios";
-const APIURL = process.env.REACT_APP_API_URL;
+import env from "../config/site.json";
+
+const APIURL = process.env.REACT_APP_API_URL; ;
+ 
 
 let headers = {
   "Content-Type": "application/json",
