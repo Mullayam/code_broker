@@ -5,7 +5,6 @@ const CheckProtectedRoomOrNot = (req, res) => {
   let checkingDir = path.join(__dirname, `rooms`, clientRoomId);
 
   if (!fs.existsSync(`${checkingDir}.txt`)) {
-    console.log(checkingDir);
     return res.status(200).json({
       status: "false",
       message: "This Room is not Password Protected",

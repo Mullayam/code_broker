@@ -9,6 +9,8 @@ async function ExistDir(Username, RoomID) {
   let createdDir = false;
   try {
     if (!fs.existsSync(`${TempFiles}`)) {
+       
+
       if (!fs.existsSync(`${TempFiles}/${RoomID}/${Username}`)) {
         fs.mkdirSync(`${TempFiles}/${RoomID}/${Username}`, { recursive: true });
       } else {
@@ -18,6 +20,7 @@ async function ExistDir(Username, RoomID) {
     } else {
       fs.mkdirSync(`${TempFiles}/${RoomID}/${Username}`, { recursive: true });
       createdDir = true;
+     
       return createdDir;
     }
     return createdDir;
@@ -55,21 +58,24 @@ class FileActivity {
     const {
       RoomInfo: { roomId, user },
     } = req.body;
-    const dirCheck = await fs.readdirSync(`${CreateFileIn}/${roomId}`);
-    if (dirCheck.length > 9) {
-      if (dirCheck.includes(user)) {
+    const dirCheck = fs.existsSync(`${CreateFileIn}/${roomId}/@${user}`);
+
+    if (dirCheck) {
+      const readDir = fs.readdirSync(`${CreateFileIn}/${roomId}`);
+      if (readDir.length > 9) {
+        if (readDir.includes(user)) {
+          return res.status(200).json({
+            code: "02",
+            message: "",
+          });
+        }
         return res.status(200).json({
-          code: "02",
-          message: "",
+          code: "01",
+          message: "This Room is full(9) of users,Please Join/Create Other",
         });
       }
-      return res.status(200).json({
-        code: "01",
-        message: "This Room is full(9) of users,Please Join/Create Other",
-      });
     } else {
       let DirectoryToBeCreated = await ExistDir(user, roomId);
-
       if (typeof DirectoryToBeCreated === "undefined") {
         return res.status(200).json({
           status: "true",
